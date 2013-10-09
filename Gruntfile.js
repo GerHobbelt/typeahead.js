@@ -109,7 +109,42 @@ module.exports = function(grunt) {
       }
     },
 
+    jasmine: {
+      js: {
+        src: jsFiles,
+        options: {
+          specs: 'test/*_spec.js',
+          helpers: 'test/helpers/*',
+          vendor: 'test/vendor/*'
+        }
+      },
+      coverage: {
+        src: jsFiles,
+        options: {
+          specs: 'test/*_spec.js',
+          template: require('grunt-template-jasmine-istanbul'),
+          templateOptions: {
+            coverage: 'test/coverage/coverage.json',
+            report: [
+                    {
+                      type: 'html',
+                        options: {
+                          dir: 'test/coverage/html'
+                        }
+                    },
+                    {
+                      type: 'text-summary'
+                    }
+            ]
+          }
+        }
+      }
+    },
+
     exec: {
+      open_spec_runner: {
+        cmd: 'open _SpecRunner.html'
+      },
       git_is_clean: {
         cmd: 'test -z "$(git status --porcelain)"'
       },
@@ -181,6 +216,8 @@ module.exports = function(grunt) {
     grunt.task.run([
       'exec:git_on_master',
       'exec:git_is_clean',
+      'lint',
+      'test',
       'manifests:' + version,
       'build',
       'exec:git_add',
@@ -230,7 +267,10 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['uglify', 'sed:version']);
   grunt.registerTask('server', 'connect:server');
   grunt.registerTask('lint', 'jshint');
+  grunt.registerTask('test', 'jasmine:js');
+  grunt.registerTask('test:browser', ['jasmine:js:build', 'exec:open_spec_runner']);
   grunt.registerTask('dev', 'parallel:dev');
+  grunt.registerTask('test:coverage', ['jasmine:coverage']);
 
   // load tasks
   // ----------
@@ -244,4 +284,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 };
