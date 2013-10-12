@@ -713,10 +713,6 @@
         });
     }
     if (_.isMsie() && _.isMsie() <= 7) {
-        _.mixin(css.wrapper, {
-            display: "inline",
-            zoom: "1"
-        });
         _.mixin(css.query, {
             marginTop: "-1px"
         });
@@ -1158,8 +1154,11 @@
         });
         return Section;
         function setupSource(source) {
-            var Dataset = window.Dataset;
-            return Dataset && source instanceof Dataset ? _.bind(source.get, source) : source;
+            if (window.Dataset && source instanceof window.Dataset) {
+                source.initialize();
+                source = _.bind(source.get, source);
+            }
+            return source;
         }
         function getValueKeyFromDataset(source) {
             return Dataset && source instanceof Dataset ? source.valueKey : null;
@@ -1596,7 +1595,7 @@
                 }
             },
             val: function val(newVal) {
-                return newVal ? this.each(setQuery) : this.map(getQuery).get();
+                return _.isString(newVal) ? this.each(setQuery) : this.map(getQuery).get();
                 function setQuery() {
                     var $input = $(this), typeahead;
                     if (typeahead = $input.data(typeaheadKey)) {
