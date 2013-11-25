@@ -388,6 +388,7 @@
             this.footer = o.footer;
             this.valueKey = o.valueKey || "value";
             this.template = compileTemplate(o.template, o.engine, this.valueKey);
+            this.allowedNeighbors = o.allowedNeighbors || [];
             this.local = o.local;
             this.prefetch = o.prefetch;
             this.remote = o.remote;
@@ -444,6 +445,7 @@
                 } else {
                     item.datum = datum;
                 }
+                item.tokens = item.tokens.concat(this.allowedNeighbors);
                 item.tokens = utils.filter(item.tokens, function(token) {
                     return !utils.isBlankString(token);
                 });

@@ -30,6 +30,7 @@ var Dataset = (function() {
     this.footer = o.footer;
     this.valueKey = o.valueKey || 'value';
     this.template = compileTemplate(o.template, o.engine, this.valueKey);
+    this.allowedNeighbors = o.allowedNeighbors || [];
 
     // used then deleted in #initialize
     this.local = o.local;
@@ -124,6 +125,9 @@ var Dataset = (function() {
       else {
         item.datum = datum;
       }
+
+      // add in the allowed neighbor
+      item.tokens = item.tokens.concat(this.allowedNeighbors);
 
       // filter out falsy tokens
       item.tokens = utils.filter(item.tokens, function(token) {
