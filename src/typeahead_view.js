@@ -223,16 +223,18 @@ var TypeaheadView = (function() {
 
     _getSuggestions: function() {
       var that = this, query = this.inputView.getQuery();
-
-      if (utils.isBlankString(query)) { return; }
-
+      if (utils.isBlankString(query)) {
+          return;
+      }
       utils.each(this.datasets, function(i, dataset) {
-        dataset.getSuggestions(query, function(suggestions) {
-          // only render the suggestions if the query hasn't changed
-          if (query === that.inputView.getQuery()) {
-            that.dropdownView.renderSuggestions(dataset, suggestions);
-          }
-        });
+          dataset.getSuggestions(query, function(suggestions) {
+              if (query === that.inputView.getQuery()) {
+                  if(dataset.suggestionSort)
+                      suggestions.sort( utils.bind( dataset.suggestionSort, that ) );
+
+                  that.dropdownView.renderSuggestions(dataset, suggestions);
+              }
+          });
       });
     },
 

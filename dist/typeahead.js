@@ -389,6 +389,7 @@
             this.valueKey = o.valueKey || "value";
             this.template = compileTemplate(o.template, o.engine, this.valueKey);
             this.allowedNeighbors = o.allowedNeighbors || [];
+            this.suggestionSort = o.suggestionSort;
             this.local = o.local;
             this.prefetch = o.prefetch;
             this.remote = o.remote;
@@ -996,6 +997,7 @@
                 utils.each(this.datasets, function(i, dataset) {
                     dataset.getSuggestions(query, function(suggestions) {
                         if (query === that.inputView.getQuery()) {
+                            if (dataset.suggestionSort) suggestions.sort(utils.bind(dataset.suggestionSort, that));
                             that.dropdownView.renderSuggestions(dataset, suggestions);
                         }
                     });

@@ -31,6 +31,7 @@ var Dataset = (function() {
     this.valueKey = o.valueKey || 'value';
     this.template = compileTemplate(o.template, o.engine, this.valueKey);
     this.allowedNeighbors = o.allowedNeighbors || [];
+    this.suggestionSort = o.suggestionSort;
 
     // used then deleted in #initialize
     this.local = o.local;
