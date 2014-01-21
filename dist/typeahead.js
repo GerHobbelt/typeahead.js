@@ -1126,6 +1126,10 @@
                     var view = $(this).data(viewKey);
                     view && view.setQuery(query);
                 }
+            },
+            clearCache: function() {
+                cache = {};
+                return this;
             }
         };
         jQuery.fn.typeahead = function(method) {

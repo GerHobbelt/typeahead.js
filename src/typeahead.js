@@ -74,6 +74,11 @@
 
         view && view.setQuery(query);
       }
+    },
+
+    clearCache: function() {
+      cache = {};
+      return this;
     }
   };
 
