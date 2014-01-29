@@ -19,8 +19,8 @@ var Dataset = (function() {
       $.error('no template engine specified');
     }
 
-    if (!o.local && !o.prefetch && !o.remote) {
-      $.error('one of local, prefetch, or remote is required');
+    if (!o.local && !o.prefetch && !o.remote && !o.identity) {
+      $.error('one of local, identity, prefetch, or remote is required');
     }
 
     this.name = o.name || utils.getUniqueId();
@@ -35,6 +35,7 @@ var Dataset = (function() {
     this.local = o.local;
     this.prefetch = o.prefetch;
     this.remote = o.remote;
+    this.identity = o.identity;
 
     this.itemHash = {};
     this.adjacencyList = {};
@@ -174,6 +175,10 @@ var Dataset = (function() {
       });
     },
 
+    _getIdentitySuggestion: function(terms) {
+      return terms.join(" ")
+    },
+
     _getLocalSuggestions: function(terms) {
       var that = this,
           firstChars = [],
@@ -258,6 +263,9 @@ var Dataset = (function() {
 
       terms = utils.tokenizeQuery(query);
       suggestions = this._getLocalSuggestions(terms).slice(0, this.limit);
+      if(this.identity) {
+        suggestions = this._getIdentitySuggestion(terms);
+      }
 
       if (suggestions.length < this.limit && this.transport) {
         cacheHit = this.transport.get(query, processRemoteData);

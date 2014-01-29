@@ -5,8 +5,8 @@
     "typeahead",
     "autocomplete"
   ],
-  "homepage": "http://twitter.github.com/typeahead.js",
-  "bugs": "https://github.com/twitter/typeahead.js/issues",
+  "homepage": "https://github.com/whisklabs/typeahead.js",
+  "bugs": "https://github.com/whisklabs/typeahead.js/issues",
   "author": {
     "name": "Twitter, Inc.",
     "url": "https://twitter.com/twitteross"

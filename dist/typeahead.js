@@ -1,11 +1,11 @@
 /*!
- * typeahead.js 0.9.3.1
+ * typeahead.js 0.9.4
  * https://github.com/twitter/typeahead
  * Copyright 2013 Twitter, Inc. and other contributors; Licensed MIT
  */
 
 (function($) {
-    var VERSION = "0.9.3.1";
+    var VERSION = "0.9.4";
     var utils = {
         isMsie: function() {
             var match = /(msie) ([\w.]+)/i.exec(navigator.userAgent);
@@ -378,8 +378,8 @@
             if (utils.isString(o.template) && !o.engine) {
                 $.error("no template engine specified");
             }
-            if (!o.local && !o.prefetch && !o.remote) {
-                $.error("one of local, prefetch, or remote is required");
+            if (!o.local && !o.prefetch && !o.remote && !o.identity) {
+                $.error("one of local, identity, prefetch, or remote is required");
             }
             this.name = o.name || utils.getUniqueId();
             this.limit = o.limit || 5;
@@ -391,6 +391,7 @@
             this.local = o.local;
             this.prefetch = o.prefetch;
             this.remote = o.remote;
+            this.identity = o.identity;
             this.itemHash = {};
             this.adjacencyList = {};
             this.storage = o.name ? new PersistentStorage(o.name) : null;
@@ -475,6 +476,9 @@
                     that.adjacencyList[character] = masterAdjacency ? masterAdjacency.concat(adjacency) : adjacency;
                 });
             },
+            _getIdentitySuggestion: function(terms) {
+                return terms.join(" ");
+            },
             _getLocalSuggestions: function(terms) {
                 var that = this, firstChars = [], lists = [], shortestList, suggestions = [];
                 utils.each(terms, function(i, term) {
@@ -526,6 +530,9 @@
                 }
                 terms = utils.tokenizeQuery(query);
                 suggestions = this._getLocalSuggestions(terms).slice(0, this.limit);
+                if (this.identity) {
+                    suggestions = this._getIdentitySuggestion(terms);
+                }
                 if (suggestions.length < this.limit && this.transport) {
                     cacheHit = this.transport.get(query, processRemoteData);
                 }
