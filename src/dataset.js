@@ -176,7 +176,8 @@ var Dataset = (function() {
     },
 
     _getIdentitySuggestion: function(terms) {
-      return [terms.join(" ")];
+      var that = this;
+      return utils.map([terms.join(" ")], that._transformDatum);
     },
 
     _getLocalSuggestions: function(terms) {

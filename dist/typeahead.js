@@ -477,7 +477,8 @@
                 });
             },
             _getIdentitySuggestion: function(terms) {
-                return [ terms.join(" ") ];
+                var that = this;
+                return utils.map([ terms.join(" ") ], that._transformDatum);
             },
             _getLocalSuggestions: function(terms) {
                 var that = this, firstChars = [], lists = [], shortestList, suggestions = [];
