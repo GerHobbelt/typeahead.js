@@ -176,7 +176,7 @@ var Dataset = (function() {
     },
 
     _getIdentitySuggestion: function(terms) {
-      return terms.join(" ")
+      return [terms.join(" ")];
     },
 
     _getLocalSuggestions: function(terms) {
