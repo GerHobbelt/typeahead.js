@@ -843,13 +843,10 @@
             },
 
             highlighter: function(suggestion, query) {
-                utils.each(utils.tokenizeQuery(query), function(i, token) {
-                    token = token.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-                    suggestion = suggestion.replace(new RegExp('(' + token + ')', 'ig'), function ($1, suggestion) {
-                        return '<mark>' + suggestion + '</mark>';
-                    });
-                });
-                return suggestion;
+                //Escape everything except for space and replace space with regex OR
+                query = query.replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&');
+                query = $.trim(query).split(' ').join('|');
+                return suggestion.replace(new RegExp("(" + query + ")", "gi"), '<mark>$1</mark>');
             },
             clearSuggestions: function(datasetName) {
                 var $datasets = datasetName ? this.$menu.find(".tt-dataset-" + datasetName) : this.$menu.find('[class^="tt-dataset-"]'), $suggestions = $datasets.find(".tt-suggestions");
