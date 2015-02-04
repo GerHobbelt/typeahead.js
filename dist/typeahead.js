@@ -1138,6 +1138,9 @@
             clearCache: function() {
                 cache = {};
                 return this;
+            },
+            getDataset: function(dsName) {
+                return cache[dsName] || void 0;
             }
         };
         jQuery.fn.typeahead = function(method) {
