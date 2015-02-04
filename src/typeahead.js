@@ -79,6 +79,11 @@
     clearCache: function() {
       cache = {};
       return this;
+    },
+
+    /** Fetches a named dataset for lookup **/
+    getDataset: function(dsName) {
+      return cache[dsName] || (void 0);
     }
   };
 
